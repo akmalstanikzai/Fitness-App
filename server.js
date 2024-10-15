@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const workoutRoutes = require('./routes/workout');  // Import workout routes
+const nutritionRoutes = require('./routes/nutritionRoutes');  // Import nutrition routes
 
 // Express app
 const app = express();
@@ -11,12 +12,13 @@ const app = express();
 app.use(express.json());
 
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
+  console.log(`${req.method} ${req.path}`);
   next();
 });
 
 // Routes
 app.use('/api/workouts', workoutRoutes);  // Use workout routes
+app.use('/api/nutritions', nutritionRoutes);  // Use nutrition routes
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
