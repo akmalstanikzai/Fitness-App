@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const validator = require('validator')
+const crypto = require('crypto');
 
 const Schema = mongoose.Schema
 
@@ -65,4 +66,11 @@ userSchema.statics.login = async function(email, password) {
     return user
 }
   
+
+userSchema.methods.generatePasswordReset = async function() {
+  this.resetPasswordToken = crypto.randomBytes(20).toString('hex');
+  this.resetPasswordExpires = Date.now() + 3600000; // expires in 1 hour
+  await this.save(); // Save the changes to the database
+};
+
 module.exports = mongoose.model('User', userSchema)
